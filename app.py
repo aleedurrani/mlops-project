@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import joblib
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+import os
 
 app = Flask(__name__)
 
@@ -9,11 +10,13 @@ app = Flask(__name__)
 model = joblib.load("models/model.pkl")
 
 # Load the scaler used during preprocessing
-# Since the model was trained on scaled data, we need to scale inputs
 scaler = StandardScaler()
-# Fit scaler on the original data to ensure consistent scaling
 df = pd.read_csv("data/processed_data.csv")
 scaler.fit(df[["humidity", "wind_speed"]])
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -29,16 +32,17 @@ def predict():
 
         # Prepare input data
         input_data = pd.DataFrame([[humidity, wind_speed]], columns=["humidity", "wind_speed"])
-        
+       
         # Scale the input data
         input_scaled = scaler.transform(input_data)
-        
+       
         # Make prediction
         prediction = model.predict(input_scaled)[0]
-        
+       
         return jsonify({"predicted_temperature": prediction})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
+    os.makedirs("templates", exist_ok=True)
     app.run(debug=True, host="0.0.0.0", port=5000)
