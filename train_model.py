@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 import joblib
 
+
 def train_model():
     # Load preprocessed data
     df = pd.read_csv("data/processed_data.csv")
@@ -17,6 +18,7 @@ def train_model():
     # Save model
     joblib.dump(model, "models/model.pkl")
     print("Model saved to models/model.pkl")
+
 
 if __name__ == "__main__":
     import os
