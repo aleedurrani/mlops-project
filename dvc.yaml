@@ -13,5 +13,6 @@ stages:
     cmd: python train_model.py
     deps:
       - data/processed_data.csv
+      - train_model.py  
     outs:
       - models/model.pkl
