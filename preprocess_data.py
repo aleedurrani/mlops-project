@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
+
 def preprocess_data():
     # Load raw data
     df = pd.read_csv("data/raw_data.csv")
@@ -21,6 +22,7 @@ def preprocess_data():
     # Save preprocessed data
     df.to_csv("data/processed_data.csv", index=False)
     print("Preprocessed data saved to data/processed_data.csv")
+
 
 if __name__ == "__main__":
     preprocess_data()
