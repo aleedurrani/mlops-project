@@ -4,3 +4,4 @@ scikit-learn
 flake8
 pytest
 joblib
+flask
