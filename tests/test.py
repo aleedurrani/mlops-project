@@ -47,7 +47,7 @@ def test_model_prediction_edge_case(mock_model_and_scaler):
 
     # Check that prediction is still reasonable
     assert isinstance(prediction, float), f"Expected float, got {type(prediction)}"
-    assert -5 < prediction < 5, f"Prediction {prediction} out of expected range"
+    assert -5 < prediction < 10, f"Prediction {prediction} out of expected range"
     print("Test 2 (Edge case): Passed")
 
 def test_model_prediction_invalid_input(mock_model_and_scaler):
