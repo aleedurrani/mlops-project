@@ -1,8 +1,7 @@
+import sys
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime
-import sys
-import os
 
 # Add project root to Python path
 sys.path.append("/opt/airflow")

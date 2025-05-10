@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 from datetime import datetime, timedelta
 
+
 def collect_weather_data():
     # Open-Meteo API endpoint for historical data
     base_url = "https://archive-api.open-meteo.com/v1/archive"
@@ -11,7 +12,8 @@ def collect_weather_data():
         "longitude": -74.0060,
         "start_date": (datetime.now() - timedelta(days=5)).strftime("%Y-%m-%d"),
         "end_date": datetime.now().strftime("%Y-%m-%d"),
-        "hourly": "temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code"
+        "hourly": "temperature_2m,relative_humidity_2m,wind_speed_10m,"
+                  "weather_code"
     }
 
     try:
@@ -45,6 +47,7 @@ def collect_weather_data():
         print("Data saved to data/raw_data.csv")
     except requests.exceptions.RequestException as e:
         print(f"Error fetching data: {e}")
+
 
 if __name__ == "__main__":
     import os
