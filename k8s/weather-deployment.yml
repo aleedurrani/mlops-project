@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-predictor
+  labels:
+    app: weather-predictor
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: weather-predictor
+  template:
+    metadata:
+      labels:
+        app: weather-predictor
+    spec:
+      containers:
+      - name: weather-predictor
+        image: weather-predictor:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLASK_ENV
+          value: "production"
