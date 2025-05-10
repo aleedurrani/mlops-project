@@ -10,7 +10,9 @@ def collect_weather_data():
     params = {
         "latitude": 40.7128,
         "longitude": -74.0060,
-        "start_date": (datetime.now() - timedelta(days=5)).strftime("%Y-%m-%d"),
+        "start_date": (
+            datetime.now() - timedelta(days=5)
+        ).strftime("%Y-%m-%d"),
         "end_date": datetime.now().strftime("%Y-%m-%d"),
         "hourly": "temperature_2m,relative_humidity_2m,wind_speed_10m,"
                   "weather_code"
@@ -38,7 +40,7 @@ def collect_weather_data():
             2: "Cloudy",
             3: "Overcast",
             61: "Rain",
-            95: "Thunderstorm"
+            95: "Thunderstorm",
         }
         df["weather_condition"] = df["weather_code"].map(weather_map).fillna("Unknown")
 
