@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Temperature Predictor</h1>
+       
+        <form id="predict-form" class="space-y-4">
+            <div>
+                <label for="humidity" class="block text-sm font-medium text-gray-700">Humidity</label>
+                <input type="number" id="humidity" name="humidity" step="0.1" min="0" max="1" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div>
+                <label for="wind_speed" class="block text-sm font-medium text-gray-700">Wind Speed</label>
+                <input type="number" id="wind_speed" name="wind_speed" step="0.1" min="0" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <button type="submit"
+                    class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                Predict Temperature
+            </button>
+        </form>
+       
+        <div id="result" class="mt-6 text-center hidden">
+            <p class="text-lg font-medium text-gray-800">Predicted Temperature: <span id="temperature" class="font-bold"></span></p>
+        </div>
+        <div id="error" class="mt-6 text-center hidden">
+            <p class="text-sm text-red-600"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("predict-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+           
+            const humidity = parseFloat(document.getElementById("humidity").value);
+            const wind_speed = parseFloat(document.getElementById("wind_speed").value);
+           
+            const resultDiv = document.getElementById("result");
+            const temperatureSpan = document.getElementById("temperature");
+            const errorDiv = document.getElementById("error");
+            const errorMsg = errorDiv.querySelector("p");
+           
+            resultDiv.classList.add("hidden");
+            errorDiv.classList.add("hidden");
+           
+            try {
+                const response = await fetch("/predict", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ humidity, wind_speed })
+                });
+               
+                const data = await response.json();
+               
+                if (response.ok) {
+                    temperatureSpan.textContent = data.predicted_temperature.toFixed(2);
+                    resultDiv.classList.remove("hidden");
+                } else {
+                    errorMsg.textContent = data.error || "An error occurred";
+                    errorDiv.classList.remove("hidden");
+                }
+            } catch (err) {
+                errorMsg.textContent = "Failed to connect to the server";
+                errorDiv.classList.remove("hidden");
+            }
+        });
+    </script>
+</body>
+</html>

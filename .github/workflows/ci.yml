@@ -15,7 +15,7 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
       - name: Lint with flake8
-        run: flake8 . --exclude webserver_config.py,collect_data.py,dags/weather_pipeline.py,tests/test.py,app.py
+        run: flake8 . --exclude webserver_config.py,collect_data.py,dags/weather_pipeline.py,tests/test.py,app.py,templates/index.html
 
   test:
     runs-on: ubuntu-latest
