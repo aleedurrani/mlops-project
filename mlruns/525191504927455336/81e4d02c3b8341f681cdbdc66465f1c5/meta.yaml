@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/525191504927455336/81e4d02c3b8341f681cdbdc66465f1c5/artifacts
+end_time: 1746882361646
+entry_point_name: ''
+experiment_id: '525191504927455336'
+lifecycle_stage: active
+run_id: 81e4d02c3b8341f681cdbdc66465f1c5
+run_name: classy-mouse-645
+run_uuid: 81e4d02c3b8341f681cdbdc66465f1c5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746882354701
+status: 3
+tags: []
+user_id: Ali
