@@ -1,32 +1,10 @@
-name: CI Pipeline
-
-on: [push]
-
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
-      - name: Lint with flake8
-        run: flake8 . --exclude webserver_config.py,train_model.py,collect_data.py,dags/weather_pipeline.py,tests/test.py,app.py,templates/index.html
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
-      - name: Run Unit Tests
-        run: pytest tests/test.py -v
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-predictor
+spec:
+  ports:
+  - port: 5000
+    targetPort: 5000
+  selector:
+    app: weather-predictor
