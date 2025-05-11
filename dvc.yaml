@@ -1,29 +1,25 @@
+# DVC pipeline stages definition
 stages:
-  download:
-    cmd: python download_images.py
-    outs:
-      - data/images/
 
-  augment:
-    cmd: python augment_images.py
+  # Stage 1: Data Collection
+  collect:
+    cmd: python collect_data.py  # Command to run the data collection script
+    outs:
+      - data/raw_data.csv  # Output file containing the raw data
+
+  # Stage 2: Data Preprocessing
+  preprocess:
+    cmd: python preprocess_data.py  # Command to preprocess raw data
     deps:
-      - data/images/
+      - data/raw_data.csv  # Dependency: raw data generated from the previous stage
     outs:
-      - data/augmented/
+      - data/processed_data.csv  # Output: cleaned and processed data
 
+  # Stage 3: Model Training
   train:
-    cmd: python train_cnn.py
+    cmd: python train_model.py  # Command to train the ML model
     deps:
-      - data/augmented/
-      - train_cnn.py
+      - data/processed_data.csv  # Dependency: preprocessed data
+      - train_model.py  # Dependency: training script
     outs:
-      - models/cnn_model.h5
-      - logs/train_log.json
-
-  evaluate:
-    cmd: python evaluate_model.py
-    deps:
-      - models/cnn_model.h5
-      - data/augmented/
-    outs:
-      - reports/metrics.json
+      - models/model.pkl  # Output: trained model file
