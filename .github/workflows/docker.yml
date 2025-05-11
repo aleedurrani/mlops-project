@@ -1,31 +1,34 @@
-name: Docker Build and Push
+# GitHub Actions workflow for building and pushing a Docker image to Docker Hub
 
+name: Docker Build and Push  # Name of the workflow
+
+# Trigger the workflow when pushing to the main branch
 on:
   push:
     branches:
       - main
 
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
+  build-and-push:  # Job to build and push the Docker image
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
 
     steps:
-    - name: Checkout code
+    - name: Checkout code  # Pull the latest code from the repository
       uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
+    - name: Set up Docker Buildx  # Set up Docker Buildx, a builder for advanced builds
       uses: docker/setup-buildx-action@v2
 
-    - name: Log in to Docker Hub
+    - name: Log in to Docker Hub  # Authenticate to Docker Hub using secrets
       uses: docker/login-action@v2
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}  # Docker Hub username from secrets
+        password: ${{ secrets.DOCKERHUB_TOKEN }}  # Docker Hub token from secrets
 
-    - name: Build and push Docker image
+    - name: Build and push Docker image  # Build the Docker image and push it to Docker Hub
       uses: docker/build-push-action@v4
       with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/weather-predictor:latest
+        context: .  # Build context is the root of the repository
+        file: ./Dockerfile  # Path to the Dockerfile
+        push: true  # Push the image to Docker Hub
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/weather-predictor:latest  # Tag for the Docker image
