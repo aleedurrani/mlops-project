@@ -1,19 +1,25 @@
-# Kubernetes Deployment configuration for the weather-predictor application
+# Specifies that this is a Kubernetes Deployment configuration
 apiVersion: apps/v1
+
+# The kind of Kubernetes resource being created
 kind: Deployment
 
+# Metadata information about the deployment
 metadata:
-  name: weather-predictor  # Unique name for the deployment
+  name: weather-predictor  # Name of the deployment
   labels:
-    app: weather-predictor  # Label to identify and group the app
+    app: weather-predictor  # Label used for identifying this app
 
+# Specification of the desired state of the deployment
 spec:
-  replicas: 2  # Number of pods to run; adjust based on load and availability
+  replicas: 3  # Number of pod replicas to run
 
+  # Define how the deployment finds which Pods to manage
   selector:
     matchLabels:
-      app: weather-predictor  # Match pods with this label
+      app: weather-predictor  # Select pods with this label
 
+  # Template for the pods to be created by this deployment
   template:
     metadata:
       labels:
@@ -21,42 +27,13 @@ spec:
 
     spec:
       containers:
-        - name: weather-predictor  # Container name
-          image: your-dockerhub-username/weather-predictor:latest  # Use image from Docker Hub or private registry
-          imagePullPolicy: Always  # Always pull the latest image (set to "IfNotPresent" for dev)
+      - name: weather-predictor  # Name of the container
+        image: weather-predictor:latest  # Docker image to use for the container
+        imagePullPolicy: Never  # Do not pull the image from a registry (used for local testing)
 
-          ports:
-            - name: http
-              containerPort: 5000  # Flask app runs on port 5000
+        ports:
+        - containerPort: 5000  # Expose port 5000 inside the container (commonly used by Flask)
 
-          env:
-            - name: FLASK_ENV  # Environment variable for Flask
-              value: "production"
-
-            - name: APP_SECRET  # Example additional env variable
-              valueFrom:
-                secretKeyRef:
-                  name: app-secrets  # Kubernetes secret object name
-                  key: secret-key  # Key within the secret
-
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "500m"
-              memory: "256Mi"
-
-          livenessProbe:  # Optional: check if the app is alive
-            httpGet:
-              path: /health
-              port: 5000
-            initialDelaySeconds: 10
-            periodSeconds: 15
-
-          readinessProbe:  # Optional: check if the app is ready to serve traffic
-            httpGet:
-              path: /health
-              port: 5000
-            initialDelaySeconds: 5
-            periodSeconds: 10
+        env:
+        - name: FLASK_ENV  # Environment variable to set Flask environment
+          value: "production"  # Set the Flask app to production mode
