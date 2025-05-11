@@ -1,25 +1,39 @@
+# Specifies that this is a Kubernetes Deployment configuration
 apiVersion: apps/v1
+
+# The kind of Kubernetes resource being created
 kind: Deployment
+
+# Metadata information about the deployment
 metadata:
-  name: weather-predictor
+  name: weather-predictor  # Name of the deployment
   labels:
-    app: weather-predictor
+    app: weather-predictor  # Label used for identifying this app
+
+# Specification of the desired state of the deployment
 spec:
-  replicas: 3
+  replicas: 3  # Number of pod replicas to run
+
+  # Define how the deployment finds which Pods to manage
   selector:
     matchLabels:
-      app: weather-predictor
+      app: weather-predictor  # Select pods with this label
+
+  # Template for the pods to be created by this deployment
   template:
     metadata:
       labels:
-        app: weather-predictor
+        app: weather-predictor  # Label assigned to pods created by this template
+
     spec:
       containers:
-      - name: weather-predictor
-        image: weather-predictor:latest
-        imagePullPolicy: Never
+      - name: weather-predictor  # Name of the container
+        image: weather-predictor:latest  # Docker image to use for the container
+        imagePullPolicy: Never  # Do not pull the image from a registry (used for local testing)
+
         ports:
-        - containerPort: 5000
+        - containerPort: 5000  # Expose port 5000 inside the container (commonly used by Flask)
+
         env:
-        - name: FLASK_ENV
-          value: "production"
+        - name: FLASK_ENV  # Environment variable to set Flask environment
+          value: "production"  # Set the Flask app to production mode
