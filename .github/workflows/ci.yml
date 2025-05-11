@@ -1,10 +1,42 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: weather-predictor
-spec:
-  ports:
-  - port: 5000
-    targetPort: 5000
-  selector:
-    app: weather-predictor
+# GitHub Actions configuration for Continuous Integration (CI)
+
+name: CI Pipeline  # Name of the workflow displayed in the GitHub Actions tab
+
+# Trigger the workflow on every push to the repository
+on: [push]
+
+jobs:
+  lint:  # First job: Code linting
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    steps:
+      - name: Checkout code  # Pull the latest version of the code from the repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python  # Set up the Python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9  # Specify Python version to use
+
+      - name: Install Dependencies  # Install project dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint with flake8  # Run flake8 to check code style and formatting
+        run: flake8 . --exclude webserver_config.py,train_model.py,collect_data.py,dags/weather_pipeline.py,tests/test.py,app.py,templates/index.html
+        # Exclude certain files from linting
+
+  test:  # Second job: Run unit tests
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    steps:
+      - name: Checkout code  # Pull the latest version of the code from the repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python  # Set up the Python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9  # Specify Python version to use
+
+      - name: Install Dependencies  # Install project dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Unit Tests  # Run the unit tests using pytest
+        run: pytest tests/test.py -v  # -v for verbose output
